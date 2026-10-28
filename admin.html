@@ -1,0 +1,522 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#080808">
+  <title>JAN | Admin Dashboard</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #080808;
+      color: #f3e6c8;
+      font-family: Arial, sans-serif;
+    }
+
+    button, input {
+      font: inherit;
+    }
+
+    button {
+      cursor: pointer;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 16px;
+      padding: 22px 6%;
+      border-bottom: 1px solid #302b23;
+    }
+
+    .brand {
+      font-size: 22px;
+      font-weight: bold;
+      letter-spacing: 3px;
+    }
+
+    .brand span {
+      color: #ff3025;
+    }
+
+    .muted {
+      color: #aaa49a;
+      line-height: 1.6;
+    }
+
+    .login-wrap {
+      width: min(430px, 90%);
+      margin: 10vh auto;
+      padding: 30px;
+      border: 1px solid #39342b;
+      background: #0d0d0d;
+    }
+
+    h1 {
+      font-size: clamp(28px, 5vw, 42px);
+      margin-top: 0;
+    }
+
+    label {
+      display: block;
+      margin: 18px 0 8px;
+      font-size: 12px;
+      letter-spacing: 2px;
+    }
+
+    input {
+      display: block;
+      width: 100%;
+      padding: 14px;
+      background: #080808;
+      border: 1px solid #39342b;
+      color: #f3e6c8;
+    }
+
+    input:focus {
+      outline: 1px solid #f3e6c8;
+    }
+
+    .btn {
+      padding: 13px 17px;
+      border: 1px solid #f3e6c8;
+      background: #f3e6c8;
+      color: #080808;
+      font-weight: bold;
+    }
+
+    .btn:hover {
+      background: #fff;
+    }
+
+    .btn-secondary {
+      background: transparent;
+      color: #f3e6c8;
+    }
+
+    .btn-danger {
+      background: transparent;
+      color: #ff6a60;
+      border-color: #ff6a60;
+    }
+
+    .full {
+      width: 100%;
+      margin-top: 22px;
+    }
+
+    .dashboard {
+      width: min(1100px, 92%);
+      margin: 45px auto;
+    }
+
+    .dashboard-heading {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+      margin-bottom: 28px;
+    }
+
+    .message-list {
+      display: grid;
+      gap: 16px;
+    }
+
+    .message-card {
+      padding: 22px;
+      border: 1px solid #39342b;
+      background: #0d0d0d;
+      overflow-wrap: anywhere;
+    }
+
+    .message-card h3 {
+      margin: 0 0 10px;
+    }
+
+    .message-meta {
+      color: #aaa49a;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+
+    .message-body {
+      white-space: pre-wrap;
+      line-height: 1.7;
+      margin: 20px 0;
+    }
+
+    .status {
+      display: inline-block;
+      margin-bottom: 14px;
+      padding: 5px 9px;
+      border: 1px solid #77705f;
+      font-size: 11px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+    }
+
+    .status.new {
+      color: #ff8a80;
+      border-color: #a54b43;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .error {
+      color: #ff8a80;
+      line-height: 1.6;
+    }
+
+    .success {
+      color: #9ee6ad;
+      line-height: 1.6;
+    }
+
+    @media (max-width: 600px) {
+      .topbar {
+        padding: 18px 5%;
+      }
+
+      .login-wrap {
+        padding: 22px;
+      }
+
+      .dashboard {
+        margin-top: 28px;
+      }
+
+      .message-card {
+        padding: 16px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="topbar">
+    <div class="brand">JA<span>N</span> / ADMIN</div>
+    <button id="logoutBtn" class="btn btn-secondary hidden" type="button">
+      LOG OUT
+    </button>
+  </header>
+
+  <!-- LOGIN -->
+  <main id="loginView" class="login-wrap">
+    <p class="muted">PRIVATE ADMIN AREA</p>
+    <h1>Welcome back.</h1>
+    <p class="muted">Sign in to manage portfolio messages.</p>
+
+    <form id="loginForm">
+      <label for="adminEmail">ADMIN EMAIL</label>
+      <input
+        id="adminEmail"
+        type="email"
+        autocomplete="username"
+        required
+      >
+
+      <label for="adminPassword">PASSWORD</label>
+      <input
+        id="adminPassword"
+        type="password"
+        autocomplete="current-password"
+        required
+      >
+
+      <button class="btn full" id="loginBtn" type="submit">
+        SIGN IN ↗
+      </button>
+    </form>
+
+    <p id="loginStatus" role="status" aria-live="polite"></p>
+  </main>
+
+  <!-- DASHBOARD -->
+  <main id="dashboardView" class="dashboard hidden">
+    <div class="dashboard-heading">
+      <div>
+        <p class="muted">PRIVATE WORKSPACE</p>
+        <h1>Contact Messages</h1>
+        <p id="messageCount" class="muted">Loading messages...</p>
+      </div>
+
+      <button id="refreshBtn" class="btn btn-secondary" type="button">
+        REFRESH ↻
+      </button>
+    </div>
+
+    <p id="dashboardStatus" role="status" aria-live="polite"></p>
+    <section id="messageList" class="message-list"></section>
+  </main>
+
+  <script type="module">
+    import { createClient } from
+      "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm";
+
+    // Replace these two example values in Step 3 below.
+    const SUPABASE_URL = "https://YOUR_PROJECT_ID.supabase.co";
+    const SUPABASE_PUBLISHABLE_KEY = "YOUR_SUPABASE_PUBLISHABLE_KEY";
+
+    const loginView = document.getElementById("loginView");
+    const dashboardView = document.getElementById("dashboardView");
+    const loginForm = document.getElementById("loginForm");
+    const loginStatus = document.getElementById("loginStatus");
+    const dashboardStatus = document.getElementById("dashboardStatus");
+    const messageList = document.getElementById("messageList");
+    const messageCount = document.getElementById("messageCount");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const loginBtn = document.getElementById("loginBtn");
+
+    const configMissing =
+      SUPABASE_URL.includes("YOUR_PROJECT_ID") ||
+      SUPABASE_PUBLISHABLE_KEY.includes("YOUR_SUPABASE_PUBLISHABLE_KEY");
+
+    let supabase = null;
+    let currentUserId = null;
+
+    if (!configMissing) {
+      supabase = createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+    } else {
+      loginStatus.className = "error";
+      loginStatus.textContent =
+        "Setup required: add your Supabase project URL and publishable key.";
+    }
+
+    function showLogin() {
+      currentUserId = null;
+      loginView.classList.remove("hidden");
+      dashboardView.classList.add("hidden");
+      logoutBtn.classList.add("hidden");
+      messageList.replaceChildren();
+    }
+
+    function showDashboard() {
+      loginView.classList.add("hidden");
+      dashboardView.classList.remove("hidden");
+      logoutBtn.classList.remove("hidden");
+    }
+
+    // Check that the signed-in user is the registered admin.
+    async function verifyAdmin() {
+      if (!supabase) return false;
+
+      const {
+        data: { user },
+        error: userError
+      } = await supabase.auth.getUser();
+
+      if (userError || !user) {
+        showLogin();
+        return false;
+      }
+
+      const { data, error } = await supabase
+        .from("admin_users")
+        .select("user_id")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (error || !data) {
+        await supabase.auth.signOut();
+        showLogin();
+        loginStatus.className = "error";
+        loginStatus.textContent =
+          "Access denied. This account is not registered as an admin.";
+        return false;
+      }
+
+      currentUserId = user.id;
+      return true;
+    }
+
+    async function openDashboard() {
+      const allowed = await verifyAdmin();
+
+      if (!allowed) return;
+
+      showDashboard();
+      await loadMessages();
+    }
+
+    loginForm.addEventListener("submit", async (event) => {
+      event.preventDefault();
+
+      if (!supabase) return;
+
+      loginBtn.disabled = true;
+      loginStatus.className = "muted";
+      loginStatus.textContent = "Signing in...";
+
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value;
+
+      const { error } = await supabase.auth.signInWithPassword({
+        email,
+        password
+      });
+
+      loginBtn.disabled = false;
+
+      if (error) {
+        loginStatus.className = "error";
+        loginStatus.textContent = "Login failed. Check your credentials.";
+        return;
+      }
+
+      await openDashboard();
+    });
+
+    async function loadMessages() {
+      if (!currentUserId || !(await verifyAdmin())) return;
+
+      dashboardStatus.className = "muted";
+      dashboardStatus.textContent = "Loading messages...";
+      messageList.replaceChildren();
+
+      const { data, error } = await supabase
+        .from("contact_messages")
+        .select("id, name, email, reason, message, status, created_at")
+        .order("created_at", { ascending: false });
+
+      if (error) {
+        dashboardStatus.className = "error";
+        dashboardStatus.textContent =
+          "Could not load messages. Check your database policies.";
+        messageCount.textContent = "";
+        return;
+      }
+
+      messageCount.textContent = `${data.length} message(s) received.`;
+      dashboardStatus.textContent = "";
+
+      if (data.length === 0) {
+        const empty = document.createElement("p");
+        empty.className = "muted";
+        empty.textContent = "No messages yet.";
+        messageList.appendChild(empty);
+        return;
+      }
+
+      for (const item of data) {
+        const card = document.createElement("article");
+        card.className = "message-card";
+
+        const badge = document.createElement("span");
+        badge.className = "status " + (item.status === "new" ? "new" : "");
+        badge.textContent = item.status;
+
+        const heading = document.createElement("h3");
+        heading.textContent = item.name;
+
+        const meta = document.createElement("p");
+        meta.className = "message-meta";
+        meta.textContent =
+          `${item.email} · ${item.reason} · ` +
+          new Date(item.created_at).toLocaleString();
+
+        const body = document.createElement("p");
+        body.className = "message-body";
+        body.textContent = item.message;
+
+        const actions = document.createElement("div");
+        actions.className = "actions";
+
+        if (item.status === "new") {
+          const readBtn = document.createElement("button");
+          readBtn.className = "btn";
+          readBtn.type = "button";
+          readBtn.textContent = "MARK AS READ";
+
+          readBtn.addEventListener("click", async () => {
+            readBtn.disabled = true;
+
+            const { error: updateError } = await supabase
+              .from("contact_messages")
+              .update({ status: "read" })
+              .eq("id", item.id);
+
+            if (updateError) {
+              dashboardStatus.className = "error";
+              dashboardStatus.textContent = "Could not update this message.";
+            } else {
+              await loadMessages();
+            }
+          });
+
+          actions.appendChild(readBtn);
+        }
+
+        const deleteBtn = document.createElement("button");
+        deleteBtn.className = "btn btn-danger";
+        deleteBtn.type = "button";
+        deleteBtn.textContent = "DELETE";
+
+        deleteBtn.addEventListener("click", async () => {
+          if (!confirm("Delete this message permanently?")) return;
+
+          deleteBtn.disabled = true;
+
+          const { error: deleteError } = await supabase
+            .from("contact_messages")
+            .delete()
+            .eq("id", item.id);
+
+          if (deleteError) {
+            dashboardStatus.className = "error";
+            dashboardStatus.textContent = "Could not delete this message.";
+          } else {
+            await loadMessages();
+          }
+        });
+
+        actions.appendChild(deleteBtn);
+
+        card.append(badge, heading, meta, body, actions);
+        messageList.appendChild(card);
+      }
+    }
+
+    document.getElementById("refreshBtn").addEventListener("click", async () => {
+      await loadMessages();
+    });
+
+    logoutBtn.addEventListener("click", async () => {
+      if (!supabase) return;
+
+      await supabase.auth.signOut();
+      showLogin();
+      loginStatus.className = "muted";
+      loginStatus.textContent = "You have been logged out.";
+    });
+
+    if (supabase) {
+      const { data: { session } } = await supabase.auth.getSession();
+
+      if (session) {
+        await openDashboard();
+      }
+    }
+  </script>
+</body>
+</html>

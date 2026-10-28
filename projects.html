@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="All projects by Jan: web apps, AI tools and demos.">
+  <meta name="theme-color" content="#070707">
+  <title>All Projects | Jan</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800;900&family=Inter:wght@400;500;600;700&display=swap">
+
+  <style>
+    /* ========== BASE ========== */
+    :root {
+      --ink: #070707;
+      --ink-2: #0d0b0a;
+      --cream: #f1e5c9;
+      --gold: #d9a866;
+      --red: #e2370d;
+      --muted: #a39b8f;
+      --line: rgba(241, 229, 201, .12);
+      --ease: cubic-bezier(.16, 1, .3, 1);
+      --display: 'Barlow Condensed', 'Arial Narrow', sans-serif;
+      --body: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      background: var(--ink);
+      color: var(--cream);
+      font-family: var(--body);
+      line-height: 1.6;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; color: inherit; cursor: pointer; background: none; border: 0; }
+    img, video { display: block; max-width: 100%; }
+    ::selection { background: var(--red); color: #fff; }
+    :focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+
+    body::after {
+      content: "";
+      position: fixed;
+      inset: -50%;
+      z-index: 999;
+      pointer-events: none;
+      opacity: .05;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      animation: grain 8s steps(8) infinite;
+    }
+
+    /* ========== NAV ========== */
+    .navbar {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      height: 76px;
+      padding: 0 6%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      background: rgba(7, 7, 7, .72);
+      backdrop-filter: blur(14px) saturate(140%);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      border-bottom: 1px solid var(--line);
+    }
+    .brand { font-family: var(--display); font-size: 26px; font-weight: 900; letter-spacing: 1px; }
+    .brand span { color: var(--red); }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a {
+      position: relative;
+      padding: 6px 0;
+      font-size: 11px;
+      letter-spacing: 2px;
+      color: var(--muted);
+      transition: color .3s;
+    }
+    .nav-links a::after {
+      content: "";
+      position: absolute;
+      left: 0; bottom: 0;
+      width: 100%; height: 1px;
+      background: var(--red);
+      transform: scaleX(0);
+      transform-origin: right;
+      transition: transform .5s var(--ease);
+    }
+    .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+    .nav-links a:hover::after, .nav-links a.active::after { transform: scaleX(1); transform-origin: left; }
+    .resume-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border: 1px solid rgba(241, 229, 201, .35);
+      font-size: 10px;
+      letter-spacing: 2px;
+      transition: background .4s var(--ease), color .4s, border-color .4s;
+    }
+    .resume-btn:hover { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+
+    /* ========== PAGE HEADER ========== */
+    .page-head {
+      position: relative;
+      padding: 100px 8% 60px;
+      overflow: hidden;
+    }
+    .page-head::before {
+      content: "";
+      position: absolute;
+      top: -30vw; right: -15vw;
+      width: 60vw; height: 60vw;
+      max-width: 900px; max-height: 900px;
+      background: radial-gradient(circle, rgba(226, 55, 13, .18), transparent 62%);
+      filter: blur(30px);
+      pointer-events: none;
+      animation: float 14s ease-in-out infinite alternate;
+    }
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+      font-size: 11px;
+      letter-spacing: 3px;
+      color: var(--red);
+    }
+    .eyebrow::before { content: ""; width: 36px; height: 1px; background: currentColor; }
+    .page-head h1 {
+      position: relative;
+      font-family: var(--display);
+      font-size: clamp(64px, 10vw, 150px);
+      font-weight: 900;
+      line-height: .86;
+      text-transform: uppercase;
+      letter-spacing: -2px;
+    }
+    .stroke { color: transparent; -webkit-text-stroke: 1px var(--cream); }
+    .page-head p {
+      position: relative;
+      max-width: 520px;
+      margin-top: 28px;
+      font-size: 15px;
+      line-height: 1.9;
+      color: var(--muted);
+    }
+    .back-link {
+      position: relative;
+      display: inline-block;
+      margin-top: 36px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--red);
+      font-size: 11px;
+      letter-spacing: 2px;
+      transition: color .3s;
+    }
+    .back-link:hover { color: var(--red); }
+
+    /* ========== FILTERS ========== */
+    .filters {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 0 8% 40px;
+    }
+    .filter {
+      padding: 12px 18px;
+      border: 1px solid rgba(241, 229, 201, .22);
+      font-size: 11px;
+      letter-spacing: 2px;
+      transition: background .4s var(--ease), color .4s, border-color .4s;
+    }
+    .filter:hover { border-color: var(--cream); }
+    .filter.active { background: var(--cream); color: var(--ink); border-color: var(--cream); }
+
+    /* ========== GRID ========== */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 22px;
+      padding: 0 8% 120px;
+    }
+    .card {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid var(--line);
+      background: linear-gradient(160deg, #1b1412 0%, #080706 70%);
+      overflow: hidden;
+      transition: border-color .4s, transform .5s var(--ease);
+      opacity: 0;
+      transform: translateY(40px);
+      filter: blur(6px);
+      transition-property: opacity, transform, filter, border-color;
+      transition-duration: 1s, 1s, 1s, .4s;
+      transition-timing-function: var(--ease);
+      transition-delay: calc(var(--i, 0) * 100ms), calc(var(--i, 0) * 100ms), calc(var(--i, 0) * 100ms), 0s;
+    }
+    .card.in { opacity: 1; transform: none; filter: none; }
+    .card:hover { border-color: rgba(226, 55, 13, .5); }
+    .card.hide { display: none; }
+
+    /* Media: looping video on top, animated placeholder underneath */
+    .media {
+      position: relative;
+      aspect-ratio: 16 / 10;
+      overflow: hidden;
+      background: #0b0908;
+      border-bottom: 1px solid var(--line);
+    }
+    .mock {
+      position: absolute;
+      inset: 0;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      background:
+        radial-gradient(circle at 70% 30%, rgba(226, 55, 13, .22), transparent 55%),
+        linear-gradient(160deg, #15110f, #080706);
+    }
+    .mock-bar { display: flex; gap: 6px; }
+    .mock-bar i { width: 7px; height: 7px; border-radius: 50%; background: rgba(241, 229, 201, .25); }
+    .mock-bar i:first-child { background: var(--red); }
+    .mock-lines { display: grid; gap: 8px; margin-top: 6px; }
+    .mock-lines b {
+      display: block;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(241, 229, 201, .12);
+      transform: scaleX(0);
+      transform-origin: left;
+      animation: grow 3.2s var(--ease) infinite;
+    }
+    .mock-lines b:nth-child(1) { width: 78%; }
+    .mock-lines b:nth-child(2) { width: 55%; animation-delay: .4s; }
+    .mock-lines b:nth-child(3) { width: 88%; animation-delay: .8s; }
+    .mock-lines b:nth-child(4) { width: 40%; animation-delay: 1.2s; }
+    .mock-scan {
+      position: absolute;
+      left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(180deg, transparent, rgba(217, 168, 102, .12), transparent);
+      animation: scan 3.6s linear infinite;
+    }
+    .mock-label {
+      margin-top: auto;
+      font-size: 9px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .demo-video {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity .8s ease;
+    }
+    .demo-video.ready { opacity: 1; }
+    .play-tag {
+      position: absolute;
+      z-index: 2;
+      top: 12px;
+      left: 12px;
+      padding: 6px 10px;
+      font-size: 9px;
+      letter-spacing: 2px;
+      background: rgba(0, 0, 0, .6);
+      border: 1px solid var(--line);
+      opacity: 0;
+      transition: opacity .4s;
+    }
+    .demo-video.ready ~ .play-tag { opacity: 1; }
+
+    /* Body */
+    .body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 24px;
+    }
+    .meta {
+      display: flex;
+      justify-content: space-between;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--red);
+    }
+    .card h3 {
+      margin-top: 14px;
+      font-family: var(--display);
+      font-size: 38px;
+      font-weight: 800;
+      line-height: 1;
+      text-transform: uppercase;
+    }
+    .card p {
+      margin-top: 12px;
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--muted);
+    }
+    .stack {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .stack li {
+      padding: 6px 10px;
+      font-size: 10px;
+      letter-spacing: 1px;
+      border: 1px solid rgba(241, 229, 201, .18);
+      color: #c4bba9;
+    }
+
+    /* Screenshots */
+    .shots-label {
+      margin-top: 22px;
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    .shots {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+    .shot {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+      background: #100d0c;
+      border: 1px solid var(--line);
+      transition: border-color .3s, transform .4s var(--ease);
+    }
+    .shot:hover { border-color: var(--gold); transform: translateY(-3px); }
+    .shot-ph {
+      position: absolute;
+      inset: 0;
+      display: grid;
+      place-items: center;
+      font-family: var(--display);
+      font-size: 18px;
+      font-weight: 800;
+      color: rgba(241, 229, 201, .25);
+    }
+    .shot img {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .shot.has-img { cursor: zoom-in; }
+
+    /* Links */
+    .links {
+      display: flex;
+      gap: 20px;
+      margin-top: auto;
+      padding-top: 24px;
+    }
+    .links a {
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--red);
+      font-size: 10px;
+      letter-spacing: 2px;
+      transition: color .3s;
+    }
+    .links a:hover { color: var(--red); }
+    .links a[aria-disabled="true"] { opacity: .4; border-color: var(--line); pointer-events: none; }
+
+    /* Lightbox */
+    dialog {
+      width: min(1000px, 92vw);
+      max-height: 90vh;
+      padding: 0;
+      border: 1px solid var(--line);
+      background: #0b0908;
+      color: var(--cream);
+    }
+    dialog::backdrop { background: rgba(0, 0, 0, .85); }
+    dialog img { width: 100%; height: auto; max-height: 85vh; object-fit: contain; }
+    .close {
+      position: absolute;
+      top: 10px;
+      right: 14px;
+      font-size: 18px;
+      color: var(--cream);
+      background: rgba(0, 0, 0, .6);
+      padding: 4px 10px;
+    }
+
+    /* Footer */
+    footer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 28px 8%;
+      border-top: 1px solid var(--line);
+      font-size: 10px;
+      letter-spacing: 2px;
+      color: var(--muted);
+    }
+    footer a:hover { color: var(--cream); }
+
+    /* ========== KEYFRAMES ========== */
+    @keyframes grain {
+      0%, 100% { transform: translate(0, 0); }
+      12% { transform: translate(-5%, -10%); }
+      37% { transform: translate(4%, -15%); }
+      62% { transform: translate(-10%, 5%); }
+      87% { transform: translate(8%, 12%); }
+    }
+    @keyframes float {
+      from { transform: translate(0, 0) scale(1); }
+      to { transform: translate(-6vw, 4vw) scale(1.12); }
+    }
+    @keyframes grow {
+      0% { transform: scaleX(0); }
+      45%, 100% { transform: scaleX(1); }
+    }
+    @keyframes scan {
+      from { top: -40%; }
+      to { top: 100%; }
+    }
+
+    /* ========== RESPONSIVE ========== */
+    @media (max-width: 1100px) {
+      .grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 720px) {
+      .navbar { height: 64px; padding: 0 5%; }
+      .nav-links { gap: 14px; }
+      .nav-links a { font-size: 9px; letter-spacing: 1px; }
+      .resume-btn { display: none; }
+      .page-head { padding: 80px 6% 40px; }
+      .filters { padding: 0 6% 30px; }
+      .grid { grid-template-columns: 1fr; padding: 0 6% 90px; }
+      footer { padding: 22px 6%; }
+    }
+
+    /* ========== REDUCED MOTION ========== */
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+      }
+      .card { opacity: 1; transform: none; filter: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <a href="index.html" class="brand" aria-label="Home">JA<span>N</span></a>
+    <nav class="nav-links" aria-label="Main">
+      <a href="index.html#about">ABOUT</a>
+      <a href="projects.html" class="active" aria-current="page">PROJECTS</a>
+      <a href="index.html#contact">CONTACT</a>
+    </nav>
+    <a class="resume-btn" href="resume.pdf" download>RESUME ↓</a>
+  </header>
+
+  <section class="page-head">
+    <p class="eyebrow">ALL WORK / 2026</p>
+    <h1>Every <span class="stroke">project.</span></h1>
+    <p>A full look at what I've built: academic projects, web apps, AI tools and experiments. Each card plays a short demo loop, and the screenshots open full size when you click them.</p>
+    <a class="back-link" href="index.html">← BACK TO HOME</a>
+  </section>
+
+  <div class="filters" role="group" aria-label="Filter projects">
+    <button class="filter active" data-filter="all">ALL</button>
+    <button class="filter" data-filter="ai">AI</button>
+    <button class="filter" data-filter="web">WEB</button>
+    <button class="filter" data-filter="concept">CONCEPT</button>
+    <button class="filter" data-filter="demo">DEMO</button>
+  </div>
+
+  <main class="grid">
+
+    <!-- 01 TripSense AI -->
+    <article class="card" data-cat="ai" style="--i: 0">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO LOOP · ADD media/tripsense.mp4</span>
+        </div>
+        <video class="demo-video" src="media/tripsense.mp4" muted loop playsinline preload="metadata" aria-label="TripSense AI demo loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>01</span><span>AI · ACADEMIC</span></div>
+        <h3>TripSense AI</h3>
+        <p>An AI-powered travel itinerary planner. My primary academic project.</p>
+        <ul class="stack"><li>AI</li><li>ITINERARY</li><li>TRAVEL</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/tripsense-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/tripsense-1.png" alt="TripSense AI screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/tripsense-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/tripsense-2.png" alt="TripSense AI screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/tripsense-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/tripsense-3.png" alt="TripSense AI screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="https://github.com/jegan171104" target="_blank" rel="noopener noreferrer">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 02 Campus Ministry Portal -->
+    <article class="card" data-cat="web" style="--i: 1">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO LOOP · ADD media/campus-ministry.mp4</span>
+        </div>
+        <video class="demo-video" src="media/campus-ministry.mp4" muted loop playsinline preload="metadata" aria-label="Campus Ministry Portal demo loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>02</span><span>WEB · PHP</span></div>
+        <h3>Campus Ministry Portal</h3>
+        <p>A faculty directory, publications and form-template system built with PHP, MySQL and Bootstrap.</p>
+        <ul class="stack"><li>PHP</li><li>MYSQL</li><li>BOOTSTRAP</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/campus-ministry-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/campus-ministry-1.png" alt="Campus Ministry Portal screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/campus-ministry-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/campus-ministry-2.png" alt="Campus Ministry Portal screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/campus-ministry-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/campus-ministry-3.png" alt="Campus Ministry Portal screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="https://github.com/jegan171104" target="_blank" rel="noopener noreferrer">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 03 Room Expense Splitter -->
+    <article class="card" data-cat="web" style="--i: 2">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO LOOP · ADD media/room-splitter.mp4</span>
+        </div>
+        <video class="demo-video" src="media/room-splitter.mp4" muted loop playsinline preload="metadata" aria-label="Room Expense Splitter demo loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>03</span><span>WEB · PHP</span></div>
+        <h3>Room Expense Splitter</h3>
+        <p>A PHP and MySQL app for splitting shared college room expenses, with admin role-based access.</p>
+        <ul class="stack"><li>PHP</li><li>MYSQL</li><li>HTML/CSS</li><li>RBAC</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/room-splitter-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/room-splitter-1.png" alt="Room Expense Splitter screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/room-splitter-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/room-splitter-2.png" alt="Room Expense Splitter screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/room-splitter-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/room-splitter-3.png" alt="Room Expense Splitter screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="https://github.com/jegan171104" target="_blank" rel="noopener noreferrer">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 04 SJC Chatbot -->
+    <article class="card" data-cat="ai" style="--i: 3">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO LOOP · ADD media/sjc-chatbot.mp4</span>
+        </div>
+        <video class="demo-video" src="media/sjc-chatbot.mp4" muted loop playsinline preload="metadata" aria-label="SJC Chatbot demo loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>04</span><span>AI · PYTHON</span></div>
+        <h3>SJC Chatbot</h3>
+        <p>A Streamlit AI chatbot for SJC, powered by the Gemini API and a local JSON knowledge base.</p>
+        <ul class="stack"><li>PYTHON</li><li>STREAMLIT</li><li>GEMINI API</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/sjc-chatbot-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/sjc-chatbot-1.png" alt="SJC Chatbot screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/sjc-chatbot-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/sjc-chatbot-2.png" alt="SJC Chatbot screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/sjc-chatbot-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/sjc-chatbot-3.png" alt="SJC Chatbot screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="https://github.com/jegan171104" target="_blank" rel="noopener noreferrer">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 05 Virtual Campus Tour -->
+    <article class="card" data-cat="concept" style="--i: 4">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO LOOP · ADD media/campus-tour.mp4</span>
+        </div>
+        <video class="demo-video" src="media/campus-tour.mp4" muted loop playsinline preload="metadata" aria-label="Virtual Campus Tour demo loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>05</span><span>CONCEPT · MOBILE</span></div>
+        <h3>Virtual Campus Tour</h3>
+        <p>A mobile app concept that lets visitors explore the SJC campus virtually, and a possible final-year project.</p>
+        <ul class="stack"><li>MOBILE</li><li>CONCEPT</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/campus-tour-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/campus-tour-1.png" alt="Virtual Campus Tour screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/campus-tour-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/campus-tour-2.png" alt="Virtual Campus Tour screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/campus-tour-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/campus-tour-3.png" alt="Virtual Campus Tour screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="#" aria-disabled="true">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+    <!-- 06 DEMO card (replace or delete) -->
+    <article class="card" data-cat="demo" style="--i: 5">
+      <div class="media">
+        <div class="mock" aria-hidden="true">
+          <div class="mock-scan"></div>
+          <div class="mock-bar"><i></i><i></i><i></i></div>
+          <div class="mock-lines"><b></b><b></b><b></b><b></b></div>
+          <span class="mock-label">DEMO PROJECT · REPLACE ME</span>
+        </div>
+        <video class="demo-video" src="media/demo-project.mp4" muted loop playsinline preload="metadata" aria-label="Demo project loop"
+               onloadeddata="this.classList.add('ready')" onerror="this.remove()"></video>
+        <span class="play-tag">● LOOP</span>
+      </div>
+      <div class="body">
+        <div class="meta"><span>06</span><span>DEMO</span></div>
+        <h3>Your Next Project</h3>
+        <p>Placeholder card. Swap in your next build, or delete this card from projects.html.</p>
+        <ul class="stack"><li>DEMO</li><li>PLACEHOLDER</li></ul>
+        <p class="shots-label">SCREENSHOTS</p>
+        <div class="shots">
+          <button class="shot" data-src="media/demo-1.png" aria-label="Open screenshot 1"><span class="shot-ph">01</span><img src="media/demo-1.png" alt="Demo screenshot 1" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/demo-2.png" aria-label="Open screenshot 2"><span class="shot-ph">02</span><img src="media/demo-2.png" alt="Demo screenshot 2" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+          <button class="shot" data-src="media/demo-3.png" aria-label="Open screenshot 3"><span class="shot-ph">03</span><img src="media/demo-3.png" alt="Demo screenshot 3" onload="this.parentNode.classList.add('has-img')" onerror="this.remove()"></button>
+        </div>
+        <div class="links">
+          <a href="#" aria-disabled="true">CODE ↗</a>
+          <a href="#" aria-disabled="true">LIVE ↗</a>
+        </div>
+      </div>
+    </article>
+
+  </main>
+
+  <footer>
+    <span>© 2026 JAN</span>
+    <a href="index.html">BACK TO HOME ↑</a>
+  </footer>
+
+  <!-- Screenshot lightbox -->
+  <dialog id="lightbox">
+    <button class="close" id="closeLightbox" aria-label="Close">✕</button>
+    <img id="lightboxImg" alt="">
+  </dialog>
+
+  <script>
+    const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    // Reveal cards as they scroll in
+    const cards = document.querySelectorAll(".card");
+    if (reduceMotion || !("IntersectionObserver" in window)) {
+      cards.forEach((c) => c.classList.add("in"));
+    } else {
+      const revealObserver = new IntersectionObserver((entries, obs) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          entry.target.classList.add("in");
+          obs.unobserve(entry.target);
+        });
+      }, { threshold: 0.12 });
+      cards.forEach((c) => revealObserver.observe(c));
+    }
+
+    // Loop videos only while they are on screen (saves battery and bandwidth)
+    const videos = document.querySelectorAll(".demo-video");
+    if (!reduceMotion && "IntersectionObserver" in window) {
+      const videoObserver = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          const v = entry.target;
+          if (entry.isIntersecting) {
+            v.play().catch(() => {});
+          } else {
+            v.pause();
+          }
+        });
+      }, { threshold: 0.3 });
+      videos.forEach((v) => videoObserver.observe(v));
+    }
+
+    // Filters
+    const filters = document.querySelectorAll(".filter");
+    filters.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        filters.forEach((f) => f.classList.toggle("active", f === btn));
+        const type = btn.dataset.filter;
+        cards.forEach((card) => {
+          const show = type === "all" || card.dataset.cat === type;
+          card.classList.toggle("hide", !show);
+        });
+      });
+    });
+
+    // Screenshot lightbox (only for screenshots that actually loaded)
+    const lightbox = document.getElementById("lightbox");
+    const lightboxImg = document.getElementById("lightboxImg");
+
+    document.querySelectorAll(".shot").forEach((shot) => {
+      shot.addEventListener("click", () => {
+        if (!shot.classList.contains("has-img")) return;
+        lightboxImg.src = shot.dataset.src;
+        lightbox.showModal();
+      });
+    });
+
+    document.getElementById("closeLightbox").addEventListener("click", () => lightbox.close());
+    lightbox.addEventListener("click", (e) => {
+      if (e.target === lightbox) lightbox.close();
+    });
+
+    // Highlight nav link on load
+    document.querySelectorAll(".nav-links a").forEach((a) => {
+      if (a.getAttribute("href") === "projects.html") a.classList.add("active");
+    });
+  </script>
+</body>
+</html>
